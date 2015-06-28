@@ -1,5 +1,6 @@
 # jgroups-playground
-Basing on Piotr Nowicki project on JGroups within JBoss AS7
+Basing on Piotr Nowicki project on JGroups within JBoss AS7.
+
 You can see Piotr's original work here:
 http://piotrnowicki.com/2013/02/using-jgroups-directly-from-jboss-as-7-component/
 
