@@ -10,11 +10,14 @@
 
     <jee:jndi-lookup id="jChannel" jndi-name="java:jboss/channel/myChannel" expected-type="org.jgroups.JChannel"/>
 
-    <bean class="org.rastko.playground.jgroups.core.registry.DefaultDistributedRegistry">
+    <bean id="registryDelegate" class="org.rastko.playground.jgroups.core.registry.DefaultRegistry"/>
+
+    <bean id="distributedRegistry" class="org.rastko.playground.jgroups.registry.DefaultDistributedRegistry">
         <constructor-arg ref="jChannel"/>
         <constructor-arg>
             <util:constant static-field="org.rastko.playground.jgroups.ha.JGroupsPlagroundChannelServiceActivator.CHANNEL_NAME"/>
         </constructor-arg>
+        <constructor-arg ref="registryDelegate"/>
     </bean>
     
     <bean id="destinationResolver" class="org.springframework.jms.support.destination.JndiDestinationResolver"/>
