@@ -26,7 +26,16 @@ public class MessageQueueListener implements SessionAwareMessageListener {
     public void onMessage(Message message, Session session) throws JMSException {
         final TextMessage textMessage = (TextMessage) message;
         try {
-            registry.send(new JGroupsMessagePayload(textMessage.getText()));
+            final String text = textMessage.getText();
+            final int actionId;
+            try {
+                actionId = Integer.valueOf(text);
+            } catch (NumberFormatException nfe) {
+                logger.warn("Can't extract action id from message. Ignoring it.", nfe);
+                return;
+            }
+
+            registry.send(new JGroupsMessagePayload(text), actionId);
         } catch (Exception e) {
             logger.error("Failed to receive message", e);
         }

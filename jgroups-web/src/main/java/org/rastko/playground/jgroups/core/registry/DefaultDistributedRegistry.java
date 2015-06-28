@@ -3,7 +3,9 @@ package org.rastko.playground.jgroups.core.registry;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
+import org.jgroups.conf.ClassConfigurator;
 import org.rastko.playground.jgroups.dto.JGroupsMessagePayload;
+import org.rastko.playground.jgroups.message.ActionHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,13 +59,19 @@ public class DefaultDistributedRegistry {
             }
         });
 
+        if (null == ClassConfigurator.get(ActionHeader.ActionHeaderMagicNumber)) {
+            ClassConfigurator.add(ActionHeader.ActionHeaderMagicNumber, ActionHeader.class);
+        }
+
         jgroupsChannel.connect(clusterName, null, TimeUnit.SECONDS.toMillis(10));
         jgroupsChannel.getState(null, TimeUnit.SECONDS.toMillis(10), true);
     }
 
-    public void send(JGroupsMessagePayload payload) throws Exception {
+    public void send(JGroupsMessagePayload payload, int action) throws Exception {
         messages.add(payload);
         final Message msg = new Message();
+        final ActionHeader.Action actionCode = ActionHeader.Action.fromInt(action);
+        msg.putHeader(ActionHeader.ActionHeaderMagicNumber, new ActionHeader(actionCode));
         final byte[] obj = toBytes(payload);
         msg.setBuffer(obj);
         jgroupsChannel.send(msg);
