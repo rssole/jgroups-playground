@@ -11,6 +11,9 @@
     <name>jgroups-web Maven Webapp</name>
     <url>http://maven.apache.org</url>
 
+    <properties>
+        <spring.version>4.1.6.RELEASE</spring.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -94,9 +97,7 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
-    <properties>
-        <spring.version>4.1.6.RELEASE</spring.version>
-    </properties>
+
     <build>
         <finalName>jgroups-web</finalName>
 
